@@ -2,7 +2,7 @@
 
 ## <a name="nagios-discord.sh"></a>nagios-discord.sh
 
-nagios-discord.sh This will send Nagios alerts to a Discord channel configured with a webohook.
+nagios-discord.sh will send Nagios alerts to a Discord channel configured with a webhook.
 This has been tested using RHEL 7 and OSSEC version 3.2.0.
 
 __Usage__
