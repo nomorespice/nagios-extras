@@ -1,4 +1,5 @@
 * [nagios-discord.sh](#nagios-discord.sh)
+* [nagios-teams-host.sh](#nagios-discord.sh)
 
 ## <a name="nagios-discord.sh"></a>nagios-discord.sh
 
@@ -59,4 +60,40 @@ define service{
         host_name                       nagios-host
         service_description             OSSEC UNIX
         }
+```
+## <a name="nagios-teams-host.sh"></a>nagios-discord.sh
+
+nagios-teams-host.sh will send Nagios alerts to a to a Microsoft Teams channel via the incoming webhook connector. This has been tested using RHEL 8 and Nagios version 4.4.5.
+
+__Usage__
+
+On the Nagios server, place nagios-teams-host.sh into your /usr/local/bin. Ensure this file is also executable. 
+
+Next, configure Nagios to use this script for alerting:
+
+__Example (nagios-object).conf__
+
+```
+define command {
+      command_name     notify-host-teams
+      command_line     /usr/local/bin/nagios-teams-host.sh "$HOSTNAME$" "$HOSTSTATEID$" "$HOSTOUTPUT$" "$HOSTNOTES$"
+}
+
+define contact {
+        contact_name                    nagios-teams
+        host_notification_period        24x7
+        host_notification_options       d,r
+        host_notification_commands      notify-host-teams
+        }
+
+define contactgroup{
+        contactgroup_name       nagios-teams
+        members                 nagios-teams
+        }
+
+define host{
+        ~
+        contact_groups                  nagios-teams
+        ~
+	}
 ```
