@@ -1,5 +1,6 @@
 * [nagios-discord.sh](#nagios-discord.sh)
-* [nagios-teams-host.sh](#nagios-discord.sh)
+* [nagios-teams-host.sh](#nagios-teams-host.sh)
+* [nagios-teams-service.sh](#nagios-teams-service.sh)
 
 ## <a name="nagios-discord.sh"></a>nagios-discord.sh
 
@@ -63,11 +64,11 @@ define service{
 ```
 ## <a name="nagios-teams-host.sh"></a>nagios-teams-host.sh
 
-nagios-teams-host.sh will send Nagios alerts to a to a Microsoft Teams channel via the incoming webhook connector. This has been tested using RHEL 8 and Nagios version 4.4.5.
+nagios-teams-host.sh will send Nagios host alerts to a to a Microsoft Teams channel via the incoming webhook connector. This has been tested using RHEL 8 and Nagios version 4.4.5.
 
 __Usage__
 
-On the Nagios server, place nagios-teams-host.sh into your /usr/local/bin. Ensure this file is also executable. 
+On the Nagios server, place nagios-teams-host.sh into /usr/local/bin. Ensure this file is also executable. 
 
 Next, configure Nagios to use this script for alerting:
 
@@ -92,6 +93,42 @@ define contactgroup{
         }
 
 define host{
+        ~
+        contact_groups                  nagios-teams
+        ~
+	}
+```
+## <a name="nagios-teams-service.sh"></a>nagios-teams-service.sh
+
+nagios-teams-service.sh will send Nagios service alerts to a to a Microsoft Teams channel via the incoming webhook connector. This has been tested using RHEL 8 and Nagios version 4.4.5.
+
+__Usage__
+
+On the Nagios server, place nagios-teams-service.sh into /usr/local/bin. Ensure this file is also executable. 
+
+Next, configure Nagios to use this script for alerting:
+
+__Example (nagios-object).conf__
+
+```
+define command {
+      command_name     notify-service-teams
+      command_line     /usr/local/bin/nagios-teams-service.sh "$HOSTNAME$" "$SERVICEDESC$" "$SERVICESTATEID$" "$SERVICEOUTPUT$"
+}
+
+define contact {
+        contact_name                    nagios-teams
+        service_notification_period     24x7
+        service_notification_options    w,u,c,r
+        service_notification_commands   notify-service-teams
+        }
+
+define contactgroup{
+        contactgroup_name       nagios-teams
+        members                 nagios-teams
+        }
+
+define service{
         ~
         contact_groups                  nagios-teams
         ~
