@@ -61,7 +61,7 @@ define service{
         service_description             OSSEC UNIX
         }
 ```
-## <a name="nagios-teams-host.sh"></a>nagios-discord.sh
+## <a name="nagios-teams-host.sh"></a>nagios-teams-host.sh
 
 nagios-teams-host.sh will send Nagios alerts to a to a Microsoft Teams channel via the incoming webhook connector. This has been tested using RHEL 8 and Nagios version 4.4.5.
 
